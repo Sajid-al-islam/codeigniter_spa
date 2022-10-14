@@ -73,12 +73,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+// DB_CONNECTION=mysql
+// DB_HOST=ap-southeast.connect.psdb.cloud
+// DB_PORT=3306
+// DB_DATABASE=sajid_personal
+// DB_USERNAME=w3v0ax3uljea93cmjw9e
+// DB_PASSWORD=pscale_pw_SGmGHh5xCsa4Ix7Gs9wHFQTJIOPYNHvIIFbwbfJImlJ
+// MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt
+
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'codignator',
+	'hostname' => 'ap-southeast.connect.psdb.cloud',
+	'username' => 'w3v0ax3uljea93cmjw9e',
+	'password' => 'pscale_pw_SGmGHh5xCsa4Ix7Gs9wHFQTJIOPYNHvIIFbwbfJImlJ',
+	'database' => 'sajid_personal',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
