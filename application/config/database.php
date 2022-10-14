@@ -88,6 +88,7 @@ $db['default'] = array(
 	'password' => 'pscale_pw_SGmGHh5xCsa4Ix7Gs9wHFQTJIOPYNHvIIFbwbfJImlJ',
 	'database' => 'sajid_personal',
 	'dbdriver' => 'mysqli',
+	'ssl_ca' => '/etc/ssl/certs/ca-certificates.crt',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
