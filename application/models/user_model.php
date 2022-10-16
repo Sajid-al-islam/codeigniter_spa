@@ -25,21 +25,29 @@ class User_model extends CI_Model{
             }
         }
     
-        return $result;
+        redirect(site_url('user/lists'));
     }
  
     function update_user(){
+        
         $id=$this->input->post('id');
         $first_name=$this->input->post('first_name');
         $last_name=$this->input->post('last_name');
         $phone_number=$this->input->post('phone_number');
- 
-        $this->db->set('first_name', $first_name);
-        $this->db->set('last_name', $last_name);
-        $this->db->set('phone_number', $phone_number);
-        $this->db->where('id', $id);
-        $result=$this->db->update('users');
-        return $result;
+        if(!empty($first_name)){
+            for($i = 0; $i < count($first_name); $i++){
+                if(!empty($first_name[$i])){
+                    $this->db->set('first_name', $first_name[$i]);
+                    $this->db->set('last_name', $last_name[$i]);
+                    $this->db->set('phone_number', $phone_number[$i]);
+                    $this->db->where('id', $id);
+                    $result=$this->db->update('users');
+                    
+                }
+            }
+        }
+        
+        return $this->db->get_where('users', array('id' => $id))->row();
     }
  
     function delete_user(){

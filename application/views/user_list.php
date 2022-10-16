@@ -14,64 +14,40 @@
 <body>
 <div class="container">
     <!-- Page Heading -->
-    <div class="row">
+    <div class="row" id="show_data">
         <div class="col-12">
             <div class="col-md-12">
                 <h5>User list
                 </h5>
             </div>
             
-            <div class="my-3 d-flex justify-content-end">
-                <button type="button" class="btn btn-primary addMore">Add another</button>
-            </div>
+            
 
-            <form method="post" action="<?php echo site_url('user/save');?>">
+            <?php foreach ($data as $item) { ?>  
+            <form class="my-3" id="edit_modal<?php echo $item->id ?>" action="javascript:void(0)">
                 <div class="border p-3 fieldGroup">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Id</label>                             
-                        <input type="text" readonly name="id" id="id" class="form-control" placeholder="User Id">
+                        <input type="text" readonly name="id" id="id" class="form-control" value="<?php echo $item->id ?>" placeholder="User Id">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">First Name</label>
-                        <input type="text" name="first_name[]" id="first_name" class="form-control" placeholder="User Name">
+                        <input type="text" name="first_name[]" id="first_name" value="<?php echo $item->first_name ?>" class="form-control" placeholder="User Name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Last Name</label>
-                        <input type="text" name="last_name[]" id="last_name" class="form-control" placeholder="Last Name">
+                        <input type="text" name="last_name[]" id="last_name" value="<?php echo $item->last_name ?>" class="form-control" placeholder="Last Name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Phone Number</label>
-                        <input type="text" name="phone_number[]" id="phone_number" class="form-control" placeholder="phone_number">
+                        <input type="text" name="phone_number[]" id="phone_number" value="<?php echo $item->phone_number ?>" class="form-control" placeholder="phone_number">
                     </div>
-                </div>
-                <div class="fieldGroupCopy" style="display: none;">
-                    <div class="border p-3">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Id</label>                             
-                            <input type="text" readonly name="id" id="id" class="form-control" placeholder="User Id">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">First Name</label>
-                            <input type="text" name="first_name[]" id="first_name" class="form-control" placeholder="User Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Last Name</label>
-                            <input type="text" name="last_name[]" id="last_name" class="form-control" placeholder="Last Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Phone Number</label>
-                            <input type="text" name="phone_number[]" id="phone_number" class="form-control" placeholder="phone_number">
-                        </div>
+                    <button data-id="<?php echo $item->id; ?>" class="btn btn-primary btn_update">Edit</button>
 
-                        <div class="input-group-addon"> 
-                            <a href="javascript:void(0)" class="btn btn-danger remove"><span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span> Remove</a>
-                        </div>
-                    </div>
-                
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                
             </form>
-            
+            <?php } ?>
         </div>
     </div>
          
@@ -80,45 +56,7 @@
         
         <!--END MODAL ADD-->
  
-        <!-- MODAL EDIT -->
-        <form action="">
-            <div class="modal fade" id="Modal_Edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                        
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Id</label>                             
-                            <input type="text" name="id_edit" id="id_edit" class="form-control" placeholder="User Code" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">First Name</label>
-                            <input type="text" name="first_name_edit" id="first_name_edit" class="form-control" placeholder="first Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Last Name</label>
-                            <input type="text" name="last_name_edit" id="last_name_edit" class="form-control" placeholder="last Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Phone Number</label>
-                            <input type="text" name="phone_edit" id="phone_edit" class="form-control" placeholder="phone">
-                        </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" type="submit" id="btn_update" class="btn btn-primary">Update</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </form>
-        <!--END MODAL EDIT-->
+        
  
         <!--MODAL DELETE-->
          <form>
@@ -155,10 +93,34 @@
  
 <script type="text/javascript">
     $(document).ready(function(){
-        
+
+
+        $('.btn_update').on('click',function(){
+            var id = $(this).data("id");
+            
+                var formdata = $('#edit_modal'+id).serialize();
+                
+                console.log(formdata);
+                $.ajax({
+                    type : "POST",
+                    url  : "<?php echo site_url('user/update')?>",
+                    dataType : "JSON",
+                    data : formdata,
+    
+                    success: function(data){
+                        console.log(data);
+                        // location.reload(true)
+                        $('[name="first_name"]').val(data.first_name);
+                        $('[name="last_name"]').val(data.first_name);
+                        $('[name="phone_number"]').val(data.phone_number);
+                    }
+                });
+                return false;
+        });
+
         
 
-        show_product(); //call function show all product
+//         show_product(); //call function show all product
          
         $('#mydata').dataTable();
     
@@ -179,35 +141,7 @@
         $("body").on("click",".remove",function(){ 
             $(this).parents(".fieldGroup").remove();
         });
-  
-        //function show all product
-        function show_product(){
-            $.ajax({
-                type  : 'ajax',
-                url   : '<?php echo site_url('user/user_data')?>',
-                async : true,
-                dataType : 'json',
-                success : function(data){
-                    console.log(data);
-                    var html = '';
-                    var i;
-                    for(i=0; i<data.length; i++){
-                        html += '<tr>'+
-                                '<td>'+data[i].id+'</td>'+
-                                '<td>'+data[i].first_name+'</td>'+
-                                '<td>'+data[i].last_name+'</td>'+
-                                '<td>'+data[i].phone_number+'</td>'+
-                                '<td style="text-align:right;">'+
-                                    '<a href="javascript:void(0);" class="btn btn-info btn-sm item_edit" data-id="'+data[i].id+'" data-first_name="'+data[i].first_name+'" data-last_name="'+data[i].last_name+'" data-phone_number="'+data[i].phone_number+'">Edit</a>'+' '+
-                                    '<a href="javascript:void(0);" class="btn btn-danger btn-sm item_delete" data-id="'+data[i].id+'">Delete</a>'+
-                                '</td>'+
-                                '</tr>';
-                    }
-                    $('#show_data').html(html);
-                }
  
-            });
-        }
  
         //Save product
 //         $('#btn_save').on('click',function(){
@@ -249,29 +183,10 @@
             $('[name="phone_edit"]').val(phone_number);
 //             $('[name="price_edit"]').val(price);
         });
- 
+    
+        
         //update record to database
-         $('#btn_update').on('click',function(){
-            var id = $('#id_edit').val();
-            var first_name = $('#first_name_edit').val();
-            var last_name = $('#last_name_edit').val();
-            var phone_number        = $('#phone_edit').val();
-            $.ajax({
-                type : "POST",
-                url  : "<?php echo site_url('user/update')?>",
-                dataType : "JSON",
-                data : {id:id , first_name:first_name, last_name:last_name, phone_number:phone_number},
-                success: function(data){
-                    $('[name="id_edit"]').val("");
-                    $('[name="first_name_edit"]').val("");
-                    $('[name="last_name_edit"]').val("");
-                    $('[name="phone_edit"]').val("");
-                    $('#Modal_Edit').modal('hide');
-                    show_product();
-                }
-            });
-            return false;
-        });
+        
  
         //get data for delete record
         $('#show_data').on('click','.item_delete',function(){
